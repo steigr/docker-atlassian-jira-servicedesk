@@ -1,4 +1,4 @@
-FROM steigr/java:8_server-jre_unlimited
+FROM steigr/tomcat:latest
 
 ENV  APPLICATION_USER=servicedesk \
 		 JIRA_SERVICEDESK_VERSION=3.3.1
@@ -9,6 +9,7 @@ RUN  addgroup -S $APPLICATION_USER \
  &&  install -D -d -o $APPLICATION_USER -g $APPLICATION_USER /app \
  &&  curl -L https://www.atlassian.com/software/jira/downloads/binary/atlassian-servicedesk-$JIRA_SERVICEDESK_VERSION.tar.gz \
      | su-exec $APPLICATION_USER tar -x -z -C /app --strip-components=1 \
+ &&  tomcat-install /app $APPLICATION_USER \
  &&  rm -rf /app/lib/hsqldb-*.jar \
             /app/lib/postgresql-*.jar \
             /app/README* \
